@@ -1,0 +1,184 @@
+<?php
+include('header.php');
+require('connexion.php');
+
+
+function estdanspanier($article)
+{
+	require('connexion.php');
+	$req = $db->prepare('SELECT concert_i FROM ligne_commande WHERE concert_i = :concert_i');
+	$req->execute(array(':concert_i'=>$article));
+$doublon= $req->fetch();
+if($doublon)
+{
+	//echo 'Le mail existe deja';
+	return true;
+}
+
+}
+		
+if(!empty($_POST['id_pd']) and !empty($_POST['quantite']))
+{
+	//if(!empty($_SESSION['id_client']))
+	//{
+		$id_cmd = $_POST['id_pd'];
+		$qte=$_POST['quantite'];
+		$prixinit=$_POST['prixinit'];
+		$lieucmd=$_POST['lieuxcmd'];
+		$artistecmd=$_POST['artistecmd'];
+		
+		$_SESSION['id_pd']=$id_cmd;
+		$_SESSION['quantite']=$qte;
+		$_SESSION['prixinit']=$prixinit;
+		$_SESSION['artistecmd']=$artistecmd;
+		//$_SESSION['lieuxcmd']=$lieuxcmd;
+		unset($_POST);
+		$_POST=array();
+		//$prixtotale=$qte*$prixinit;
+		//$dateachat= date("Y-m-d");
+		
+		/*$leschoix=array();
+		$leschoix[]=array(
+		'id' => $id_cmd,
+		'quantite' => $qte);*/
+		
+		
+		
+	/*}
+	
+	else
+	{
+		echo 'Veillez vous connecter sur votre compte';
+		header('Location : login.php');
+	}	*/
+}
+
+?>
+
+<!DOCTYPE html>
+<html>
+ <head>
+<meta charset="utf-8"/>
+  	<link href="css/style.css" rel="stylesheet" type="text/css"/>
+	<title>SiteWebShop</title>
+
+</head>
+<body>
+<?php
+//empty($_SESSION['id_client']) and 
+if(!empty($_SESSION['id_pd']))
+{
+$total=0;
+$tabid_art=explode("//",$_SESSION['id_pd']);
+$tabquantite=explode("//",$_SESSION['quantite']);
+$tabprix_unit=explode("//",$_SESSION['prixinit']);
+$tabnom=explode("//",$_SESSION['artistecmd']);
+
+
+for($i=0;$i<count($tabid_art);$i++)
+{
+	//echo 'first'. $tabid_art[$i];
+  $requete = $db->query('SELECT id_concert,artiste,prix,lieux, date_concert FROM Concert WHERE id_concert="'.$tabid_art[$i].'"');
+
+  while($tab=$requete->fetch())
+  {
+	  ?>
+
+    <?$tab['id_concert']?>
+	<?$tab['artiste']?>
+	<?$tabquantite[$i]?>
+	<?$tab['prix']?>
+	<?phpround($tab['prix']*$tabquantite[$i],2)?>
+	
+	<?php $total+=$tab['prix']*$tabquantite[$i];
+	$_SESSION['total']=$total;
+	?>
+
+<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="#">Home</a></li>
+				  <li class="active">Shopping Cart</li>
+				</ol>
+			</div>
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image">Article</td>
+							<td class="description"></td>
+							<td class="price">Prix</td>
+							<td class="quantity">Quantité</td>
+							<td class="total">Total</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="cart_product">
+								<a href=""><img src="images/cart/one.png" alt=""></a>
+							</td>
+							<td class="cart_description">
+								<h4><a href=""><?=$tab['artiste']?></a></h4>
+								<p>Date  <?= $tab['date_concert']?></p>
+							</td>
+							<td class="cart_price">
+								<p><?=$tab['prix']?></p>
+							</td>
+							<td class="cart_quantity">
+								<div class="cart_quantity_button">
+									<a class="cart_quantity_up" href=""> + </a>
+									<input class="cart_quantity_input" type="text" name="quantity" value="<?=$_SESSION['quantite']?> autocomplete="off" size="2">
+									<a class="cart_quantity_down" href=""> - </a>
+								</div>
+							</td>
+							<td class="cart_total">
+								<p class="cart_total_price"><?=$_SESSION['total']?></p>
+							</td>
+							<td class="cart_delete">
+								<a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+
+	
+
+
+<?php if(!empty($_SESSION['id_client']))
+{?>
+	<a href="commande.php" onclick="window.location='commande.php'">
+<button type="button"> Finaliser La reservation </button>
+</a>
+
+  <?php
+}
+else
+{?>
+	<a href="login.php" onclick="window.location='login.php'">
+<button type="button"> Finaliser La reservation </button>
+</a>
+<?php
+}
+  }
+}?>
+
+<b>Prix total T.T.C</b> 
+<br>
+<b><?=$total?></b>
+<?php
+}
+else
+{
+	?>
+	<img src="images/poubelle.png" alt="image"/>
+<p>Votre panier est vide</p>
+<?php
+}
+?>
+</section>
+</body>
+<footer>
+<?=require('footer.php');?>	
+</footer>
+
+</html>

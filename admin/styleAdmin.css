@@ -1,0 +1,60 @@
+body{
+	color :#000000; /*#69644e;*/
+	background-color: #B0C4DE;
+	margin : 0 auto;
+	width :900px;
+}
+
+#container{
+background-color: #708090;/*#C0C0C0;*/
+
+}
+#msg
+{
+	background-color: #A5260A;
+	text-align : center;
+	
+	
+}
+
+
+h2{
+	font-size:2em;
+	text-align : center;
+	text-transform: uppercase;
+
+}
+
+
+form{
+	width :800px;
+	margin : 0 auto;
+	position:relative;
+}
+
+input[type="text"],select{
+	position :absolute;
+	left : 150px;
+}
+
+select{
+	width:100px;
+}
+
+.m-right
+{
+	float:right;
+}
+.m-link
+{
+	text-decoration:none;
+	color:#000000;
+	text-transform:uppercase;
+	font-weight:700;
+	padding:0;
+	margin: 0 10px;
+	transition: all 0.3s ease-in-out;
+	border-bottom:2px solid transparent;
+}
+
+
