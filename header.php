@@ -28,7 +28,7 @@ if((isset($_SESSION['nom']) and isset($_SESSION['prenom']) and isset($_SESSION['
 					<div class="col-sm-6">
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
-								<li><a href="#"><i class="fa fa-phone"></i> +33 7 69 03 59 05</a></li>
+								<li><a href="#"><i class="fa fa-phone"></i> +33 7 69 03 59 05 10</a></li>
 								<li><a href="#"><i class="fa fa-envelope"></i> richardmulamba16@gmail.com.com</a></li>
 							</ul>
 						</div>
